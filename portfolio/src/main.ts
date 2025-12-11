@@ -17,27 +17,30 @@ const orbitControls=new OrbitControls(camera,renderer.domElement);
 
 function animate(){
   requestAnimationFrame(animate);
-  torus.rotation.x +=0.0001;
-  torus.rotation.y +=0.0001;
+  torus.rotation.x +=0.0005;
+  torus.rotation.y +=0.0005;
   torus.rotation.z+=0.0005;
   orbitControls.update();
   renderer.render(scene,camera);
 }
 const moonTexture= new THREE.TextureLoader().load('moon.jpg');
-
+const normalTexture= new THREE.TextureLoader().load('moonbumps.jpg')
 const geometry= new THREE.SphereGeometry(5,32,16);
-const material= new THREE.MeshStandardMaterial({map:moonTexture});
+const material= new THREE.MeshStandardMaterial({
+  map:moonTexture,
+  normalMap:normalTexture
+});
 const torus=new THREE.Mesh(geometry,material);
 scene.add(torus);
 const pointLight= new THREE.PointLight(0xffffff);
-const ambientLight= new THREE.AmbientLight(0xffffff);
+const ambientLight= new THREE.AmbientLight(0xffffff,2);
 const lightHelper=new THREE.PointLightHelper(pointLight);
 const gridHelper= new THREE.GridHelper(200,50);
 
 
 pointLight.position.set(8,8,8);
 scene.add(pointLight,ambientLight);
-scene.add(lightHelper,gridHelper);
+/*scene.add(lightHelper,gridHelper);*/
 
 animate();
 
@@ -56,3 +59,15 @@ Array(200).fill().forEach(addStar);
 
 const spaceTexture= new THREE.TextureLoader().load('space.jpg');
 scene.background=spaceTexture;
+
+torus.position.z=10;
+torus.position.x=-10;
+
+function moveCamera(){
+  const t= document.body.getBoundingClientRect().top;
+  camera.position.z=t*(-0.01);
+  camera.position.x=t*(-0.0002);
+  camera.rotation.y=t*(-0.02);
+  camera.rotation.z=t*(0.1);
+}
+document.body.onscroll=moveCamera;
