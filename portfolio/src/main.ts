@@ -17,15 +17,16 @@ const orbitControls=new OrbitControls(camera,renderer.domElement);
 
 function animate(){
   requestAnimationFrame(animate);
-  torus.rotation.x +=0.01;
-  torus.rotation.y +=0.01;
-  torus.rotation.z+=0.05;
+  torus.rotation.x +=0.0001;
+  torus.rotation.y +=0.0001;
+  torus.rotation.z+=0.0005;
   orbitControls.update();
   renderer.render(scene,camera);
 }
+const moonTexture= new THREE.TextureLoader().load('moon.jpg');
 
 const geometry= new THREE.SphereGeometry(5,32,16);
-const material= new THREE.MeshStandardMaterial({color:0xff6347});
+const material= new THREE.MeshStandardMaterial({map:moonTexture});
 const torus=new THREE.Mesh(geometry,material);
 scene.add(torus);
 const pointLight= new THREE.PointLight(0xffffff);
@@ -52,3 +53,6 @@ function addStar(){
   scene.add(star)
 }
 Array(200).fill().forEach(addStar);
+
+const spaceTexture= new THREE.TextureLoader().load('space.jpg');
+scene.background=spaceTexture;
